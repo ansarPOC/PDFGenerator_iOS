@@ -8,11 +8,11 @@
 import UIKit
 import WebKit
 
-class PDFPreviewVC: UIViewController {
+public class PDFPreviewVC: UIViewController {
 
     var webView: WKWebView?
     var url: URL!
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         webView = WKWebView(frame: self.view.bounds)
@@ -29,7 +29,7 @@ class PDFPreviewVC: UIViewController {
         }
     }
 
-    override func didReceiveMemoryWarning() {
+    public override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
