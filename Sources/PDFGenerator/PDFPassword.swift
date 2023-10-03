@@ -1,0 +1,69 @@
+//
+//  PDFPassword.swift
+//  PDF_Demo
+//
+//  Created by Ansar on 12/05/23.
+//
+
+//TODO: Multi language
+//TODO: Potrait, Landscape
+
+import Foundation
+import UIKit
+
+public struct PDFPassword {
+    static let NoPassword = ""
+    fileprivate static let PasswordLengthMax = 32
+    let userPassword: String
+    let ownerPassword: String
+
+    public init(user userPassword: String, owner ownerPassword: String) {
+        self.userPassword = userPassword
+        self.ownerPassword = ownerPassword
+    }
+
+    public init(_ password: String) {
+        self.init(user: password, owner: password)
+    }
+
+    func toDocumentInfo() -> [AnyHashable: Any] {
+        var info: [AnyHashable: Any] = [:]
+        if userPassword != type(of: self).NoPassword {
+            info[String(kCGPDFContextUserPassword)] = userPassword
+        }
+        if ownerPassword != type(of: self).NoPassword {
+            info[String(kCGPDFContextOwnerPassword)] = ownerPassword
+        }
+        return info
+    }
+
+    func verify() throws {
+        guard userPassword.canBeConverted(to: String.Encoding.ascii) else {
+            throw PDFGenerateError.invalidPassword(userPassword)
+        }
+        guard userPassword.count <= type(of: self).PasswordLengthMax else {
+            throw PDFGenerateError.tooLongPassword(userPassword.count)
+        }
+
+        guard ownerPassword.canBeConverted(to: String.Encoding.ascii) else {
+            throw PDFGenerateError.invalidPassword(ownerPassword)
+        }
+        guard ownerPassword.count <= type(of: self).PasswordLengthMax else {
+            throw PDFGenerateError.tooLongPassword(ownerPassword.count)
+        }
+    }
+}
+
+extension PDFPassword: ExpressibleByStringLiteral {
+    public init(unicodeScalarLiteral value: String) {
+        self.init(value)
+    }
+
+    public init(extendedGraphemeClusterLiteral value: String) {
+        self.init(value)
+    }
+
+    public init(stringLiteral value: String) {
+        self.init(value)
+    }
+}
