@@ -37,7 +37,7 @@ public class PDFPreviewVC: UIViewController {
         dismiss(animated: true, completion: nil)
     }
 
-    func setupWithURL(_ url: URL) {
+    public func setupWithURL(_ url: URL) {
         self.url = url
     }
 }
